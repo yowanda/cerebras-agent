@@ -16,7 +16,7 @@ app.get('/', (req, res) => {
   res.json({
     status: 'online',
     provider: 'Cerebras',
-    model: 'llama3.1-8b'
+    model: 'gpt-oss-120b'
   });
 });
 
@@ -31,7 +31,7 @@ app.post('/chat', async (req, res) => {
     }
 
     const completion = await cerebras.chat.completions.create({
-      model: 'llama3.1-8b',
+      model: 'gpt-oss-120b',
       messages: [
         {
           role: 'user',

@@ -18,7 +18,7 @@ export default async function handler(req, res) {
 
   try {
     const completion = await cerebras.chat.completions.create({
-      model: 'llama3.1-8b',
+      model: 'gpt-oss-120b',
       messages: [
         {
           role: 'user',
