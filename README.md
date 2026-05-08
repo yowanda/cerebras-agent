@@ -1,13 +1,22 @@
 # Cerebras Agent
 
-Express server yang ngebungkus Cerebras Cloud SDK (`llama3.1-8b`).
+Cerebras Cloud SDK (`llama3.1-8b`) — dua mode: serverless (Vercel) + classic Express server.
 
 ## Endpoint
 
 - `GET /` — health/info
 - `POST /chat` — body: `{ "message": "..." }` → `{ "success": true, "response": "..." }`
 
-## Run Local
+## Vercel (serverless, gratis 24/7)
+
+Function-nya ada di `api/`:
+- `api/index.js` — handler `GET /`
+- `api/chat.js` — handler `POST /chat`
+- `vercel.json` — routing biar `/` dan `/chat` ke-rewrite ke `/api/*`
+
+Deploy: import repo ke https://vercel.com/new, set env `CEREBRAS_API_KEY`, deploy.
+
+## Run Local (Express)
 
 ```bash
 npm install
@@ -16,27 +25,16 @@ cp .env.example .env
 npm start
 ```
 
-## Deploy ke Render (free)
-
-1. Push folder ini ke GitHub repo kamu (public).
-2. Buka https://render.com → Sign up pakai GitHub.
-3. Dashboard → **New** → **Blueprint** → pilih repo kamu (Render bakal baca `render.yaml`).
-4. Render akan minta isi env var `CEREBRAS_API_KEY` (gak ke-commit, sync=false). Paste API key kamu.
-5. Klik **Apply**. Tunggu build + deploy ~2 menit.
-6. Render kasih URL `https://cerebras-agent-xxxx.onrender.com`.
-
 Test:
 
 ```bash
-curl https://YOUR_URL.onrender.com/
-curl -X POST https://YOUR_URL.onrender.com/chat \
+curl http://localhost:3000/
+curl -X POST http://localhost:3000/chat \
   -H "Content-Type: application/json" \
   -d '{"message":"Halo"}'
 ```
 
-Free tier sleeps after ~15 min idle — request pertama setelah idle akan cold-start (~30 detik).
-
-## Deploy ke VPS (alternatif, PM2 24/7)
+## Deploy ke VPS (PM2 24/7)
 
 ```bash
 sudo apt update && sudo apt install -y nodejs npm
